@@ -63,25 +63,31 @@ app.post("/bfhl", async (req, res) => {
     } else if (req.body.hcf) {
       let arr = req.body.hcf;
       data = hcfArr(arr);
-    } else if (req.body.AI) {
-      let question = req.body.AI;
+    } } else if (req.body.AI) {
+  const question = req.body.AI;
 
-      // call Gemini API
-      const resp = await axios.post(
-        "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview:generateContent",
+  const resp = await axios.post(
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_KEY}`,
+    {
+      contents: [
         {
-          contents: [{ parts: [{ text: question }] }],
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${GEMINI_KEY}`,
-          },
+          parts: [{ text: question }]
         }
-      );
+      ]
+    },
+    {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }
+  );
 
-      let answer = resp.data?.candidates?.[0]?.content?.parts?.[0]?.text || "Unknown";
-      data = answer.split(" ")[0]; // just first word
+  const answer =
+    resp.data?.candidates?.[0]?.content?.parts?.[0]?.text || "Unknown";
+
+  data = answer.split(" ")[0];
+}
+
     } else {
       return res.status(400).json({ is_success: false, error: "no valid key" });
     }
@@ -105,4 +111,5 @@ app.get("/health", (req, res) => {
 });
 
 module.exports=app;
+
 

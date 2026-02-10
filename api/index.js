@@ -68,7 +68,7 @@ app.post("/bfhl", async (req, res) => {
 
       // call Gemini API
       const resp = await axios.post(
-        "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent",
+        "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent",
         {
           contents: [{ parts: [{ text: question }] }],
         },
@@ -104,7 +104,4 @@ app.get("/health", (req, res) => {
   });
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log("Server running on port " + PORT);
-});
+module.exports=app;
